@@ -1,0 +1,48 @@
+.form-group input,
+.form-group select {
+    width: 100%; /* Ensures inputs take full width of the parent container */
+    max-width: 100%; /* Prevents input boxes from exceeding the container size */
+    padding: 10px;
+    border-radius: 8px;
+   
+    background-color: #f3f1f7;
+    font-size: 14px;
+   
+    box-sizing: border-box; /* Ensures padding and borders are included in the element’s width */
+}
+ 
+.search-bar input {
+    width: 100%; /* Ensures the search input takes full width within its flex container */
+    max-width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f3f1f7;
+ 
+}
+.Employee{
+  color: #333;
+  text-align: left;
+  font-size: 23px;
+}
+ 
+.search-bar{
+border: none;
+ 
+ 
+}
+ 
+.Add-btn {
+  background-color: #1f1664;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 20%;
+  margin-top: 20px;
+}
+ 
+.Add-btn:hover {
+  background-color: #26139e;
+}
