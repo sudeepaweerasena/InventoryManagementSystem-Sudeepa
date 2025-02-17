@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import "./Login.css";
-import logo from './images/Altria-logo.png';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -11,23 +9,28 @@ const Login = () => {
         e.preventDefault(); // Prevent form submission reload
 
         try {
+            // Replace this URL with your Azure hosted login API endpoint
             const response = await fetch('http://localhost:3000/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ username, password }) // Sending the login credentials
             });
 
             if (response.ok) {
                 const data = await response.json();
                 console.log("Logged in successfully", data);
 
+                // Store token in localStorage
                 localStorage.setItem('token', data.token);
+
+                // Set success message
                 setMessage("Login successful! Redirecting...");
 
+                // Redirect after 2 seconds
                 setTimeout(() => {
-                    window.location.href = "/LaptopDetailsPage";
+                    window.location.href = "/LaptopDetailsPage"; // Change to your desired route
                 }, 2000);
             } else {
                 const errorData = await response.json();
@@ -41,18 +44,15 @@ const Login = () => {
     };
 
     return (
-        <div className="login-wrapper">
-            <div className="login-box">
-                <img src={logo} alt="Altria Logo" className="login-title" />
-                {/* <h2 className="login-title">Welcome Back</h2> */}
-                <form onSubmit={handleLogin} className="login-form">
+        <div className="login-container">
+            <h2>Login</h2>
+            <form onSubmit={handleLogin}>
                 <input
                     type="text"
                     placeholder="Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
-                    className="login-input"
                 />
                 <input
                     type="password"
@@ -60,13 +60,10 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="login-input"
                 />
-
-                    <button type="submit" className="login-button">Login</button>
-                </form>
-                {message && <p className="login-message">{message}</p>}
-            </div>
+                <button type="submit">Login</button>
+            </form>
+            {message && <p>{message}</p>}
         </div>
     );
 };

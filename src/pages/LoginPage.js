@@ -1,9 +1,13 @@
 import React from 'react';
-import Login from '../components/Login';
-
+import Background from '../components/loder';
 
 const LoginPage = () => {
-  return <Login />;
+  return (
+    <>
+      <Background />
+     
+    </>
+  );
 };
 
 export default LoginPage;

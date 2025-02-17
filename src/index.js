@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import App from './App'; 
+import PrivateRoute from './components/PrivateRoute'; 
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RepairFormPage from './pages/RepairFormPage';
@@ -22,12 +23,13 @@ ReactDOM.render(
       <Route path="/" element={<App />}>
         <Route index element={<LandingPage />} />  {/* Default route */}
         <Route path="LandingPage" element={<LandingPage />} />
+        <Route path="Handoverpage" element={<PrivateRoute><HandoverPage /></PrivateRoute>} />
         <Route path="LoginPage" element={<LoginPage />} />
         <Route path="RepairFormPage" element={<RepairFormPage />} />
         <Route path="LaptopDetailsPage" element={<LaptopDetailsPage />} />
         <Route path="EmployeeDetailsPage" element={<EmployeeDetailsPage />} />
         <Route path="TransferPage" element={<TransferPage />} />
-        <Route path="HandoverPage" element={<HandoverPage />} />
+        {/* <Route path="HandoverPage" element={<HandoverPage />} /> */}
         <Route path="NetworkEquipmentPage" element={<NetworkEquipmentPage />} />
         <Route path="AccessoriesPage" element={<AccessoriesPage />} />
         <Route path="InUseDevicePage" element={<InUseDevicePage />} />

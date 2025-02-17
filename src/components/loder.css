@@ -1,0 +1,28 @@
+*{
+    background: black;
+}
+
+.load {
+    width: 120px;
+    height: 120px;
+    animation: animate-load 1.5s ease infinite;
+    animation-direction: alternate-reverse;
+    display: flex;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    box-shadow: 0 0 15px #fff, 0 0 35px #867be4;
+}
+
+@keyframes animate-load {
+    0% {
+        transform: rotateX(0) rotateY(0);
+    }
+    50% {
+        transform: rotateX(0) rotateY(180deg);
+    }
+    100% {
+        transform: rotateX(180deg) rotateY(180deg);
+    }
+}

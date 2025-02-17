@@ -2,12 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const { sql, poolPromise } = require('./db'); 
+const jwt = require('jsonwebtoken');
+
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+const JWT_SECRET_KEY = 'inventory'; // Keep this in a secure place, don't expose it
 
 
 // Function to calculate warranty expiry date
@@ -17,6 +20,73 @@ function calculateWarrantyExpiryDate(purchaseDate, warentyMonths) {
     return date.toISOString().split('T')[0]; 
 }
 
+
+// // Middleware to verify JWT token and check user roles
+// const verifyToken = (req, res, next) => {
+//     const token = req.header('Authorization')?.replace('Bearer ', '');
+//     if (!token) return res.status(401).send({ message: 'Access Denied' });
+
+//     try {
+//         const decoded = jwt.verify(token, JWT_SECRET_KEY);
+//         req.user = decoded;
+//         next();
+//     } catch (err) {
+//         return res.status(400).send({ message: 'Invalid Token' });
+//     }
+// };
+
+const verifyTokenAndAdmin = (req, res, next) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) return res.status(401).send({ message: 'Access Denied' });
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET_KEY);
+        console.log(decoded);  // Log the decoded token to verify the role
+        if (decoded.role !== 'Admin') {
+            return res.status(403).send({ message: 'Access Forbidden: Admins only' });
+        }
+        req.user = decoded;
+        next();
+    } catch (err) {
+        return res.status(400).send({ message: 'Invalid Token' });
+    }
+};
+
+
+// Login API to authenticate users
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const pool = await poolPromise;
+        const query = `
+            SELECT * FROM UserDetails WHERE Username = @Username
+        `;
+        
+        const result = await pool.request()
+            .input('Username', sql.VarChar(50), username)
+            .query(query);
+        
+        if (result.recordset.length === 0) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+
+        const user = result.recordset[0];
+
+        if (password !== user.Password) {
+            return res.status(400).send({ message: 'Invalid credentials' });
+        }
+
+        const token = jwt.sign({ userId: user.UserId, role: user.UserRole }, JWT_SECRET_KEY, { expiresIn: '1h' });
+
+        res.status(200).json({ token, password: user.Password });
+    } catch (error) {
+        console.error('Login Error:', error);
+        res.status(500).send({ message: 'Internal Server Error' });
+    }
+});
+
+
 // Route to handle device addition (inserts into both LaptopDetails and DeviceDetails)
 app.post('/api/LaptopDetails', async (req, res) => {
     try {
@@ -24,7 +94,7 @@ app.post('/api/LaptopDetails', async (req, res) => {
         const {
             device, model, deviceBrand, assetId, processor, laptopId, installedRam,
             serialNumber, systemType, invoiceNumber, purchasedDate,
-            purchasedAmount, address, warentyMonths
+            purchasedAmount, warentyMonths
         } = req.body;
 
         console.log('Received form data:', req.body);
@@ -40,11 +110,11 @@ app.post('/api/LaptopDetails', async (req, res) => {
         const laptopDetailsQuery = `
             INSERT INTO LaptopDetails1 (
                 Device, Model, DeviceBrand, AssetID, Processor, LaptopId, InstalledRAM, SerialNumber,
-                SystemType, InvoiceNumber, PurchaseDate, PurchaseAmount, Address,
+                SystemType, InvoiceNumber, PurchaseDate, PurchaseAmount,
                 WarentyMonths, WarrentyExpieryDate, SysDate
             ) VALUES (
                 @Device, @Model, @DeviceBrand, @AssetID, @Processor, @LaptopId, @InstalledRAM, @SerialNumber,
-                @SystemType, @InvoiceNumber, @PurchaseDate, @PurchaseAmount, @Address,
+                @SystemType, @InvoiceNumber, @PurchaseDate, @PurchaseAmount,
                 @WarentyMonths, @WarrentyExpieryDate, GETDATE()
             )
         `;
@@ -79,7 +149,6 @@ app.post('/api/LaptopDetails', async (req, res) => {
                 .input('InvoiceNumber', sql.VarChar(50), invoiceNumber)
                 .input('PurchaseDate', sql.Date, purchasedDate)
                 .input('PurchaseAmount', sql.Decimal(10, 2), purchasedAmount)
-                .input('Address', sql.VarChar(50), address)
                 .input('WarentyMonths', sql.Int, warentyMonths)
                 .input('WarrentyExpieryDate', sql.Date, warrentyExpieryDate)
                 .query(laptopDetailsQuery);
@@ -120,8 +189,42 @@ app.post('/api/LaptopDetails', async (req, res) => {
 
 
 
+// // Route to get laptop details by Asset ID from LaptopDetails1 table
+// app.get('/api/laptop/:assetId', async (req, res) => {
+//     try {
+//         const pool = await poolPromise;
+//         const assetId = req.params.assetId;
+
+//         console.log(`Fetching laptop details for Asset ID: ${assetId}`);
+
+//         const query = `
+//             SELECT Device, AssetID, DeviceBrand, LaptopId, Model, SerialNumber,
+//                    Processor, InstalledRAM, SystemType, InvoiceNumber, PurchaseDate,
+//                    PurchaseAmount, WarentyMonths, WarrentyExpieryDate, SysDate
+//             FROM LaptopDetails1
+//             WHERE AssetID = @AssetID
+//         `;
+
+//         const result = await pool.request()
+//             .input('AssetID', sql.VarChar(50), assetId)
+//             .query(query);
+
+//         if (result.recordset.length > 0) {
+//             console.log('Laptop details found:', result.recordset[0]);
+//             res.status(200).json(result.recordset[0]);
+//         } else {
+//             console.log('Laptop not found.');
+//             res.status(404).send({ message: 'Laptop not found' });
+//         }
+//     } catch (err) {
+//         console.error('Error fetching laptop details:', err.message);
+//         res.status(500).send({ error: 'Server error: ' + err.message });
+//     }
+// });
+
+
 // Route to get laptop details by Asset ID from LaptopDetails1 table
-app.get('/api/laptop/:assetId', async (req, res) => {
+app.get('/api/laptop/:assetId', verifyTokenAndAdmin, async (req, res) => {
     try {
         const pool = await poolPromise;
         const assetId = req.params.assetId;
@@ -131,7 +234,7 @@ app.get('/api/laptop/:assetId', async (req, res) => {
         const query = `
             SELECT Device, AssetID, DeviceBrand, LaptopId, Model, SerialNumber,
                    Processor, InstalledRAM, SystemType, InvoiceNumber, PurchaseDate,
-                   PurchaseAmount, Address, WarentyMonths, WarrentyExpieryDate, SysDate
+                   PurchaseAmount, WarentyMonths, WarrentyExpieryDate, SysDate
             FROM LaptopDetails1
             WHERE AssetID = @AssetID
         `;
@@ -145,13 +248,15 @@ app.get('/api/laptop/:assetId', async (req, res) => {
             res.status(200).json(result.recordset[0]);
         } else {
             console.log('Laptop not found.');
-            res.status(404).send({ message: 'Laptop not found' });
+            res.status(404). send({ message: 'Laptop not found' });
         }
     } catch (err) {
         console.error('Error fetching laptop details:', err.message);
         res.status(500).send({ error: 'Server error: ' + err.message });
     }
 });
+
+
 
 
 //Retrieve data to the transfer page

@@ -11,6 +11,11 @@ const Sidebar = () => {
         setSidebarOpen(!isSidebarOpen);
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // Remove the token from localStorage
+        window.location.href = "/"; // Redirect to login page (adjust path as necessary)
+    };
+
     return (
         <>
             {/* Hamburger menu for mobile */}
@@ -83,6 +88,29 @@ const Sidebar = () => {
                     <i className="fas fa-clipboard-list"></i>
                     <span>In Stock Devices</span>
                 </Link>
+
+                {/* Logout Button */}
+                <button className="menu-item" 
+                 style={{
+                    display: 'flex', 
+                    alignItems: 'left', 
+                    justifyContent: 'left', 
+                    backgroundColor: '#f44336', 
+                    color: 'white', 
+                    fontSize: '16px', 
+                    fontWeight: 'bold', 
+                    border: 'none', 
+                    borderRadius: '5px', 
+                    padding: '10px 20px', 
+                    cursor: 'pointer', 
+                    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', 
+                    width: '100%', 
+                    marginTop: '20px',
+                }}
+                onClick={handleLogout}>
+                    <i className="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
             </div>
         </>
     );

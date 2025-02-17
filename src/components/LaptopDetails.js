@@ -16,8 +16,7 @@ const LaptopDetails = () => {
         invoiceNumber: '',
         purchasedDate: '',
         purchasedAmount: '',
-        warentyMonths: '',
-        address: ''
+        warentyMonths: ''
     });
 
     const [searchAssetId, setSearchAssetId] = useState('');
@@ -43,23 +42,23 @@ const LaptopDetails = () => {
             alert("Please enter an Asset ID to search.");
             return;
         }
-
+    
+        const token = localStorage.getItem('token');  // Assuming the token is stored in localStorage
+    
         try {
             console.log(`Fetching details for Asset ID: ${searchAssetId}`);
-            const response = await fetch(`http://localhost:3000/api/laptop/${searchAssetId}`);
-
-            if (!response.ok) {
-                // Check if the response is HTML instead of JSON
-                const contentType = response.headers.get("content-type");
-                if (contentType && contentType.includes("text/html")) {
-                    throw new Error('Received HTML instead of JSON');
+            const response = await fetch(`http://localhost:3000/api/laptop/${searchAssetId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
-
+            });
+    
+            if (!response.ok) {
                 const errorData = await response.json();
                 console.error('Error data:', errorData);
-                throw new Error(errorData.error || 'Unknown error occurred');
+                throw new Error(errorData.message || 'Unknown error occurred');
             }
-
+    
             const data = await response.json();
             console.log('Received data:', data); // Log the received data
             setFormData({
@@ -75,15 +74,15 @@ const LaptopDetails = () => {
                 invoiceNumber: data.InvoiceNumber || '',
                 purchasedDate: data.PurchaseDate ? data.PurchaseDate.split('T')[0] : '',
                 purchasedAmount: data.PurchaseAmount || '',
-                warentyMonths: data.WarentyMonths || '',
-                address: data.Address || '',
+                warentyMonths: data.WarentyMonths || ''
             });
-
+    
         } catch (error) {
             console.error('Error fetching device:', error.message);
             alert('An error occurred while fetching the device details: ' + error.message);
         }
     };
+    
 
     const resetFormData = () => {
         setFormData({
@@ -99,8 +98,7 @@ const LaptopDetails = () => {
             invoiceNumber: '',
             purchasedDate: '',
             purchasedAmount: '',
-            warentyMonths: '',
-            address: ''
+            warentyMonths: ''
         });
     };
 
@@ -216,12 +214,7 @@ const LaptopDetails = () => {
                     </div>
                 </div>
 
-                <div className="form-row">
-                    <div className="form-group">
-                        <label>Address</label>
-                        <input type="text" name="address" placeholder="Address" className="full-width" onChange={handleChange} value={formData.address} />
-                    </div>
-                </div>
+      
 
                 <div className="form-row">
                     <div className="form-group">

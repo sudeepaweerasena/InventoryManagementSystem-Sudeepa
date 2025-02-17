@@ -1,0 +1,307 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+/* .wrapper1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('./images/5590457.jpg') no-repeat center center fixed;
+    background-size: cover; 
+    z-index: -1; 
+} */
+
+.wrapper1 {
+    z-index: 1;
+    background: linear-gradient(-45deg, red, green, blue, yellow);
+    background-size: 400% 400%;
+    width: 100%;
+    height: 100vh;
+    animation: animate-background 15s ease infinite;
+}
+
+@keyframes animate-background {
+    0%{
+        background-position: 0 50%;
+    }
+    50%{
+        background-position: 100% 50%;
+    }
+    100%{
+        background-position: 0 50%;
+    }
+}
+
+
+
+.boxs div{
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-color: transparent;
+    border: 6px solid rgba(225, 225, 225, 0.8);
+}
+
+.boxs div:nth-child(1){
+    top: 12%;
+    left: 42%;
+    animation: animate 10s linear infinite;
+    /* border: 6px solid rgba(119, 55, 55, 0.8); */
+}
+
+.boxs div:nth-child(2){
+    top: 90%;
+    left: 90%;
+    animation: animate 7s linear infinite;
+    /* border: 6px solid rgba(182, 212, 45, 0.8); */
+}
+
+.boxs div:nth-child(3){
+    top: 17%;
+    left: 6%;
+    animation: animate 9s linear infinite;
+    /* border: 6px solid rgba(151, 27, 120, 0.8); */
+}
+
+.boxs div:nth-child(4){
+    top: 20%;
+    left: 60%;
+    animation: animate 10s linear infinite;
+}
+
+.boxs div:nth-child(5){
+    top: 67%;
+    left: 10%;
+    animation: animate 6s linear infinite;
+}
+
+.boxs div:nth-child(6){
+    top: 80%;
+    left: 70%;
+    animation: animate 12s linear infinite;
+}
+
+.boxs div:nth-child(7){
+    top: 60%;
+    left: 80%;
+    animation: animate 15s linear infinite;
+}
+
+.boxs div:nth-child(8){
+    top: 32%;
+    left: 25%;
+    animation: animate 16s linear infinite;
+}
+
+.boxs div:nth-child(9){
+    top: 90%;
+    left: 25%;
+    animation: animate 9s linear infinite;
+}
+
+.boxs div:nth-child(10){
+    top: 20%;
+    left: 80%;
+    animation: animate 5s linear infinite;
+}
+
+@keyframes animate{
+    0%{
+        transform: scale(0) translateY(0) rotate(0);
+        opacity: 1;
+    }
+    100%{
+        transform: scale(1.3) translateY(-90px) rotate(360deg);
+        opacity: 1;
+    }
+    
+}
+
+
+
+/* Resetting margin and padding for all elements to ensure consistent layout across browsers */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Using flexbox to center the form box both vertically and horizontally */
+.wrapper {
+    display: flex;
+    align-items: center; /* Centers vertically in the viewport */
+    justify-content: center; /* Centers horizontally in the viewport */
+    min-height: 100vh; /* Full viewport height */
+    /* background-color: green; Background color */
+    color: white; /* Text color for light theme visibility */
+    font-family: 'Poppins', sans-serif; /* Font family for text */
+}
+
+.form-box {
+    width: 420px; /* Fixed width */
+    padding: 40px; /* Padding around the form */
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5); 
+    position: relative;
+	width: 380px;
+	height: 460px;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+
+.form-box::before 
+{
+	content: '';
+	z-index: 1;
+	position: absolute;
+	top: -50%;
+	left: -50%;
+	width: 380px;
+	height: 420px;
+	transform-origin: bottom right;
+	background: linear-gradient(0deg,transparent,#45f3ff,#45f3ff);
+	animation: from-boxanimate 6s linear infinite;
+}
+.form-box::after 
+{
+	content: '';
+	z-index: 1;
+	position: absolute;
+	top: -50%;
+	left: -50%;
+	width: 380px;
+	height: 420px;
+	transform-origin: bottom right;
+	background: linear-gradient(0deg,transparent,#45f3ff,#45f3ff);
+	animation: from-boxanimate 6s linear infinite;
+	animation-delay: -3s;
+}
+@keyframes from-boxanimate 
+{
+	0%
+	{
+		transform: rotate(0deg);
+	}
+	100%
+	{
+		transform: rotate(360deg);
+	}
+}
+
+.form-login 
+{
+	position: absolute;
+	inset: 9px;
+	background: #9da4bb;
+	padding: 50px 40px;
+	border-radius: 8px;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Centering the title and increasing font size for better visibility */
+.form-login h1 {
+    font-size: 36px;
+    text-align: center;
+    color: #3b3333;
+}
+
+/* Container for input elements, spaced out vertically */
+.input-box {
+    position: relative;
+    margin: 30px 0;
+    width: 100%;
+    height: 50px;
+    
+}
+
+
+
+/* Button styling for submission */
+/* .loginpage-btn {
+    display: block; 
+    width: 100%; 
+    height: 45px;
+    background: white; 
+    color: #333; 
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 40px;
+    cursor: pointer;
+    margin: 30px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+} */
+
+/* Ensures that no border appears on focus to maintain a clean look */
+.input-box input:focus, .loginpage-btn:focus {
+    outline: none;
+}
+
+/* button */
+.loginpage-btn {
+    margin: 100px;
+    padding: 15px 40px;
+    border: none;
+    outline: none;
+    color: #FFF;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 12px;
+  }
+  .loginpage-btn::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+  }
+  /* glow */
+  .loginpage-btn::before {
+    content: "";
+    background: linear-gradient(
+      45deg,
+      #FF0000, #FF7300, #FFFB00, #48FF00,
+      #00FFD5, #002BFF, #FF00C8, #FF0000
+    );
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 600%;
+    z-index: -1;
+    width: calc(100% + 4px);
+    height:  calc(100% + 4px);
+    filter: blur(8px);
+    animation: glowing 20s linear infinite;
+    transition: opacity .3s ease-in-out;
+    border-radius: 10px;
+    opacity: 0;
+  }
+  
+  @keyframes glowing {
+    0% {background-position: 0 0;}
+    50% {background-position: 400% 0;}
+    100% {background-position: 0 0;}
+  }
+  
+  /* hover */
+  .loginpage-btn:hover::before {
+    opacity: 1;
+  }
+  
+  .loginpage-btn:active:after {
+    background: transparent;
+  }
+  
+  .loginpage-btn:active {
+    color: #000;
+    font-weight: bold;
+  }

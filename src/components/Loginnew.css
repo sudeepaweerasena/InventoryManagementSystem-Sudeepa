@@ -1,0 +1,82 @@
+
+/* Using flexbox to center the form box both vertically and horizontally */
+.wrapper {
+    display: flex;
+    align-items: center; /* Centers vertically in the viewport */
+    justify-content: center; /* Centers horizontally in the viewport */
+    min-height: 80vh; /* Full viewport height */
+    /* background: url('./images/10 Hour 4k TV Fast moving Meditation Multi color Purple Neon  light Tunnel Abstract background video.jpg') no-repeat center center fixed; */
+    /* background-size: cover; Cover the entire viewport without repeating */
+    color: white; /* Text color for light theme visibility */
+    font-family: 'Poppins', sans-serif; /* Font family for text */
+}
+
+/* Styling for the form box containing the login form */
+.form-box {
+    width: 420px; /* Fixed width */
+    padding: 40px; /* Padding around the form */
+    background: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5); /* Shadow for 3D effect */
+}
+
+/* Centering the title and increasing font size for better visibility */
+.form h1 {
+    font-size: 36px;
+    text-align: center;
+}
+
+/* Container for input elements, spaced out vertically */
+.input-box {
+    position: relative;
+    margin: 30px 0;
+    width: 100%;
+    height: 50px;
+}
+
+/* Styling for input fields, ensuring they are visible and stylish */
+.input-box input {
+    width: 100%;
+    height: 100%;
+    padding: 0 45px 0 20px; /* Padding for text inside input */
+    font-size: 16px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+    border-radius: 40px; /* Rounded borders */
+    color: white; /* Text color */
+}
+
+/* Placeholder text color */
+.input-box input::placeholder {
+    color: white;
+}
+
+/* Styling for icons inside the input boxes */
+.input-box .icon {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: white; /* Ensuring icon is visible */
+}
+
+/* Button styling for submission */
+.submit-btn {
+    display: block; /* Block level element */
+    width: 100%; /* Full width */
+    height: 45px;
+    background: white; /* Background color */
+    color: #333; /* Text color */
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 40px;
+    cursor: pointer;
+    margin: 20px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Ensures that no border appears on focus to maintain a clean look */
+.input-box input:focus, .submit-btn:focus {
+    outline: none;
+}
